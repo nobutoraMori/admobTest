@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -41,42 +43,65 @@ public class TitleUI : MonoBehaviour
 	/// </summary>
 	private const string PlayerPrefsKeyUserMoney = "UserMoney";
 
-	void Start()
+	private bool _isInterstitial = false;
+	private int _rewardValue = 0;
+	void Awake()
 	{
 		PlayerPrefsInitialize();
+		//リワードの返り
+		AdmobLibrary.OnReward = (double value) =>
+		{
+			_rewardValue += (int)value;
+		};
 
+		//インターステイシャル
+		AdmobLibrary.OnLoadedInterstitial = () =>
+		{
+			_isInterstitial = true;
+		};
+		
 		AdmobLibrary.FirstSetting();
 
 		//Admobバナー作成
-		AdmobLibrary.RequestBanner(GoogleMobileAds.Api.AdSize.Banner, GoogleMobileAds.Api.AdPosition.Bottom);
+		AdmobLibrary.RequestBanner(GoogleMobileAds.Api.AdSize.IABBanner, GoogleMobileAds.Api.AdPosition.Bottom);
 		_playerAnimaton.SetBool("Opening", true);
 
 		//ボタンを押したとき
-		//ToDo : 個人的にイベント登録は、中に処理を書くよりはコールバックにした方が見やすいかなと感じました。
 		_gameStartButton.onClick.AddListener(OnGameStartButton);
 		_rewardButton.onClick.AddListener(OnRewardButton);
-
-		AdShow();
-
-		//リワードの返り
-		AdmobLibrary.OnReward += (double value) =>
-		{
-			int money = PlayerPrefs.GetInt(PlayerPrefsKeyUserMoney);
-			//報酬を加算する
-			money += (int)value;
-			PlayerPrefs.SetInt(PlayerPrefsKeyUserMoney, money);
-			UpdateMoney();
-		};
 
 		UpdateMoney();
 	}
 
-	/// <summary>
-	/// GCマネーの表示更新
-	/// </summary>
-	private void UpdateMoney()
+	private void Update()
 	{
-		_moneyText.text = PlayerPrefs.GetInt(PlayerPrefsKeyUserMoney).ToString();
+		if (_isInterstitial)
+		{
+			// 前回起動時広告を見ていないなら広告を出す
+			if (PlayerPrefs.GetInt(PlayerPrefsKeyIsSeeAdLastTimeLoadTitle) > 0)
+			{
+				// 広告を見ていたら0代入
+				PlayerPrefs.SetInt(PlayerPrefsKeyIsSeeAdLastTimeLoadTitle, 0);
+				AdmobLibrary.PlayInterstitial();
+			}
+			else
+			{
+				// 広告を見ていなかったら1代入
+				PlayerPrefs.SetInt(PlayerPrefsKeyIsSeeAdLastTimeLoadTitle, 1);
+			}
+
+			_isInterstitial = false;
+		}
+
+		if (_rewardValue >= 1)
+		{
+			int money = PlayerPrefs.GetInt(PlayerPrefsKeyUserMoney);
+			//報酬を加算する
+			money += _rewardValue;
+			PlayerPrefs.SetInt(PlayerPrefsKeyUserMoney, money);
+			UpdateMoney();
+			_rewardValue = 0;
+		}
 	}
 
 	/// <summary>
@@ -96,23 +121,11 @@ public class TitleUI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 広告の表示処理
+	/// GCマネーの表示更新
 	/// </summary>
-	private void AdShow()
+	private void UpdateMoney()
 	{
-		// 前回起動時広告を見ていないなら広告を出す
-		if (PlayerPrefs.GetInt(PlayerPrefsKeyIsSeeAdLastTimeLoadTitle) > 0)
-		{
-			AdmobLibrary.PlayInterstitial();
-
-			// 広告を見ていたら0代入
-			PlayerPrefs.SetInt(PlayerPrefsKeyIsSeeAdLastTimeLoadTitle, 0);
-		}
-		else
-		{
-			// 広告を見ていなかったら1代入
-			PlayerPrefs.SetInt(PlayerPrefsKeyIsSeeAdLastTimeLoadTitle, 1);
-		}
+		_moneyText.text = PlayerPrefs.GetInt(PlayerPrefsKeyUserMoney).ToString();
 	}
 
 	/// <summary>
