@@ -58,6 +58,7 @@ public class AdmobLibrary
 		var adRequest = new AdRequest();
 		// Load the banner with the request.
 		_bannerView.LoadAd(adRequest);
+		Debug.Log($"ロード完了、アダプティブバナーサイズ: {_bannerView.GetHeightInPixels()} {_bannerView.GetWidthInPixels()}");
 	}
 
 	/// <summary>
