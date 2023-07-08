@@ -30,6 +30,8 @@ public class TitleUI : MonoBehaviour
 	/// </summary>
 	[SerializeField] private Animator _playerAnimaton;
 
+	[SerializeField] private GameObject _view;
+	
 	/// <summary>
 	/// PlayerPrefsKey 前回Title遷移時広告を見たか
 	/// PlayerPrefsではBoolで管理できないため、ここでは0をfalse, 1をtrueとしてIntで管理する。
@@ -47,6 +49,8 @@ public class TitleUI : MonoBehaviour
 	private int _rewardValue = 0;
 	void Awake()
 	{
+
+		
 		PlayerPrefsInitialize();
 		//リワードの返り
 		AdmobLibrary.OnReward = (double value) =>
@@ -71,12 +75,15 @@ public class TitleUI : MonoBehaviour
 		_rewardButton.onClick.AddListener(OnRewardButton);
 
 		UpdateMoney();
+		
+		AdmobUMP.FirstSetting();
 	}
 
 	private void Update()
 	{
 		if (_isInterstitial)
 		{
+			//UMP開始
 			// 前回起動時広告を見ていないなら広告を出す
 			if (PlayerPrefs.GetInt(PlayerPrefsKeyIsSeeAdLastTimeLoadTitle) > 0)
 			{

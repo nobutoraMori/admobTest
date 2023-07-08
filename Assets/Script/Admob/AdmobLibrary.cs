@@ -32,8 +32,6 @@ public class AdmobLibrary
 			InitInterstitial();
 
 		});
-		
-		//AdmobUMP.FirstSetting();
 	}
 
 	
