@@ -50,8 +50,13 @@ public class AdmobLibrary
 		string adUnitId = "unexpected_platform";
 #endif
 		// Create a 320x50 banner at the top of the screen.
+		
 		_bannerView = new BannerView(adUnitId, size, position);
-
+		
+		//セーフエリアを考慮
+		// var area = Screen.safeArea;
+		// _bannerView = new BannerView(adUnitId, size, Screen.width/4 ,Screen.height /10);
+		
 		// Create an empty ad request.
 		var adRequest = new AdRequest();
 		// Load the banner with the request.
