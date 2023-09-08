@@ -76,7 +76,8 @@ public class TitleUI : MonoBehaviour
 
 		UpdateMoney();
 		
-		AdmobUMP.FirstSetting();
+		//UMPを入れたい場合はコメントを外す
+		//AdmobUMP.FirstSetting();
 	}
 
 	private void Update()
