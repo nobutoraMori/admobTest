@@ -49,8 +49,6 @@ public class TitleUI : MonoBehaviour
 	private int _rewardValue = 0;
 	void Awake()
 	{
-
-		
 		PlayerPrefsInitialize();
 		//リワードの返り
 		AdmobLibrary.OnReward = (double value) =>
@@ -76,12 +74,18 @@ public class TitleUI : MonoBehaviour
 
 		UpdateMoney();
 		
+		//リワード読み込み
+		AdmobLibrary.LoadReward();
 		//UMPを入れたい場合はコメントを外す
 		//AdmobUMP.FirstSetting();
 	}
 
 	private void Update()
 	{
+		//リワードボタンの表示切替
+		//リワードが読み込めないなら表示しない
+		_rewardButton.gameObject.SetActive(AdmobLibrary.IsActiveReward());
+		
 		if (_isInterstitial)
 		{
 			//UMP開始

@@ -34,7 +34,7 @@ public class AdmobLibrary
 		});
 	}
 
-	
+
 	/// <summary>
 	/// バナー広告を生成
 	/// </summary>
@@ -50,13 +50,13 @@ public class AdmobLibrary
 		string adUnitId = "unexpected_platform";
 #endif
 		// Create a 320x50 banner at the top of the screen.
-		
+
 		_bannerView = new BannerView(adUnitId, size, position);
-		
+
 		//セーフエリアを考慮
 		// var area = Screen.safeArea;
 		// _bannerView = new BannerView(adUnitId, size, Screen.width/4 ,Screen.height /10);
-		
+
 		// Create an empty ad request.
 		var adRequest = new AdRequest();
 		// Load the banner with the request.
@@ -146,7 +146,7 @@ public class AdmobLibrary
 	/// インタースティシャルを出す
 	/// </summary>
 	public static void PlayInterstitial()
-	{		
+	{
 		Debug.Log("PlayInterstitial");
 		if (_interstitialAd != null && _interstitialAd.CanShowAd())
 		{
@@ -174,7 +174,7 @@ public class AdmobLibrary
 	/// <summary>
 	/// リワード広告
 	/// </summary>
-	private static void InitRewarded()
+	public static void LoadReward()
 	{
 		string adUnitId;
 #if UNITY_ANDROID
@@ -185,7 +185,7 @@ public class AdmobLibrary
 		adUnitId = "unexpected_platform";
 #endif
 		var adRequest = new AdRequest();
-
+		_rewardedAd = null;
 		RewardedAd.Load(adUnitId, adRequest,
 			(RewardedAd ad, LoadAdError error) =>
 			{
@@ -221,18 +221,6 @@ public class AdmobLibrary
 					               "with error : " + error);
 				};
 				_rewardedAd = ad;
-
-
-				if (_rewardedAd != null && _rewardedAd.CanShowAd())
-				{
-					_rewardedAd.Show((Reward reward) =>
-					{
-						// TODO: Reward the user.
-						Debug.Log(String.Format("Reward ", reward.Type, reward.Amount));
-						OnReward?.Invoke(reward.Amount);
-						_rewardedAd.Destroy();
-					});
-				}
 			});
 	}
 
@@ -241,8 +229,17 @@ public class AdmobLibrary
 	/// </summary>
 	public static void ShowReward()
 	{
-		InitRewarded();
-
+		if (_rewardedAd != null && _rewardedAd.CanShowAd())
+		{
+			_rewardedAd.Show((Reward reward) =>
+			{
+				// TODO: Reward the user.
+				Debug.Log(String.Format("Reward ", reward.Type, reward.Amount));
+				OnReward?.Invoke(reward.Amount);
+				_rewardedAd.Destroy();
+				LoadReward();
+			});
+		}
 	}
 
 	/// <summary>
@@ -254,5 +251,14 @@ public class AdmobLibrary
 		{
 			_rewardedAd.Destroy();
 		}
+	}
+
+	/// <summary>
+	/// リワード
+	/// </summary>
+	/// <returns></returns>
+	public static bool IsActiveReward()
+	{
+		return _rewardedAd != null;
 	}
 }
