@@ -1,7 +1,7 @@
 using System.Collections;
-using Unity.Advertisement.IosSupport;
 using UnityEngine;
 #if UNITY_IOS
+using Unity.Advertisement.IosSupport;
 using UnityEngine.iOS;
 #endif
 
