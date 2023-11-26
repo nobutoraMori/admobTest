@@ -6,7 +6,7 @@ using UnityEditor.iOS.Xcode;
 public static class XcodePostProcessBuild
 {
     [PostProcessBuild]
-    public static void OnPostProcessBuild(BuildTarget target, string path)
+    public static void OnPostProcessBuild(BuildTarget target, string buildPath)
     {
         if (target != BuildTarget.iOS)
         {
