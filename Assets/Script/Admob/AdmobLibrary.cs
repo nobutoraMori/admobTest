@@ -21,9 +21,12 @@ public class AdmobLibrary
 	public static void FirstSetting()
 	{
 		//13歳以下を対象と「する」場合はtrue
-		RequestConfiguration request
-			= new RequestConfiguration.Builder()
-				.SetTagForChildDirectedTreatment(TagForChildDirectedTreatment.False).build();
+		RequestConfiguration request = new RequestConfiguration
+		{
+			TagForChildDirectedTreatment = TagForChildDirectedTreatment.False
+		};
+
+
 		MobileAds.SetRequestConfiguration(request);
 
 		MobileAds.Initialize((InitializationStatus initStatus) =>
@@ -59,6 +62,7 @@ public class AdmobLibrary
 
 		// Create an empty ad request.
 		var adRequest = new AdRequest();
+		
 		// Load the banner with the request.
 		_bannerView.LoadAd(adRequest);
 		Debug.Log($"ロード完了、アダプティブバナーサイズ: {_bannerView.GetHeightInPixels()} {_bannerView.GetWidthInPixels()}");
@@ -89,11 +93,7 @@ public class AdmobLibrary
 #endif
 		// Initialize an InterstitialAd.
 
-
-		var adRequest = new AdRequest.Builder()
-			.AddKeyword("unity-admob-sample")
-			.Build();
-
+		var adRequest = new AdRequest();
 		if (_interstitialAd != null)
 		{
 			_interstitialAd.Destroy();
