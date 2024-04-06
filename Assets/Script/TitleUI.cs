@@ -78,6 +78,13 @@ public class TitleUI : MonoBehaviour
 		AdmobLibrary.LoadReward();
 		//UMPを入れたい場合はコメントを外す
 		//AdmobUMP.FirstSetting();
+
+		//起動時広告
+		AppOpenAdManager.Instance.LoadAd();
+		AppOpenAdManager.Instance.OnLoaded += () =>
+		{
+			AppOpenAdManager.Instance.Show();
+		};
 	}
 
 	private void Update()
