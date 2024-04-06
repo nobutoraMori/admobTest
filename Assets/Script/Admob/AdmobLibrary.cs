@@ -43,7 +43,7 @@ public class AdmobLibrary
 	/// </summary>
 	/// <param name="size"></param>
 	/// <param name="position"></param>
-	public static void RequestBanner(AdSize size, AdPosition position)
+	public static void RequestBanner(AdSize size, AdPosition position, bool collapsible)
 	{
 #if UNITY_ANDROID
 		string adUnitId = "ca-app-pub-3940256099942544/6300978111";
@@ -52,17 +52,26 @@ public class AdmobLibrary
 #else
 		string adUnitId = "unexpected_platform";
 #endif
-		// Create a 320x50 banner at the top of the screen.
 
-		_bannerView = new BannerView(adUnitId, size, position);
+		AdSize adaptiveSize =
+					AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
+
+		_bannerView = new BannerView(adUnitId, adaptiveSize, AdPosition.Bottom);
 
 		//セーフエリアを考慮
 		// var area = Screen.safeArea;
 		// _bannerView = new BannerView(adUnitId, size, Screen.width/4 ,Screen.height /10);
 
 		// Create an empty ad request.
+
 		var adRequest = new AdRequest();
-		
+
+		if (collapsible)
+		{
+			//折り畳みバナー設定
+			adRequest.Extras.Add("collapsible", "bottom");
+		}
+
 		// Load the banner with the request.
 		_bannerView.LoadAd(adRequest);
 		Debug.Log($"ロード完了、アダプティブバナーサイズ: {_bannerView.GetHeightInPixels()} {_bannerView.GetWidthInPixels()}");

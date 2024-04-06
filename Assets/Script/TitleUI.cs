@@ -61,11 +61,11 @@ public class TitleUI : MonoBehaviour
 		{
 			_isInterstitial = true;
 		};
-		
+
 		AdmobLibrary.FirstSetting();
 
 		//Admobバナー作成
-		AdmobLibrary.RequestBanner(GoogleMobileAds.Api.AdSize.IABBanner, GoogleMobileAds.Api.AdPosition.Bottom);
+		AdmobLibrary.RequestBanner(GoogleMobileAds.Api.AdSize.IABBanner, GoogleMobileAds.Api.AdPosition.Bottom, true);
 		_playerAnimaton.SetBool("Opening", true);
 
 		//ボタンを押したとき
@@ -73,7 +73,7 @@ public class TitleUI : MonoBehaviour
 		_rewardButton.onClick.AddListener(OnRewardButton);
 
 		UpdateMoney();
-		
+
 		//リワード読み込み
 		AdmobLibrary.LoadReward();
 		//UMPを入れたい場合はコメントを外す
