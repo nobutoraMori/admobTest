@@ -1,4 +1,5 @@
 #if UNITY_IOS
+
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
@@ -14,7 +15,7 @@ public static class XcodePostProcessBuild
         }
 
         var project = new PBXProject();
-        project.ReadFromFile(PBXProject.GetPBXProjectPath(path));
+        project.ReadFromFile(PBXProject.GetPBXProjectPath(buildPath));
 
         project.SetBuildProperty(project.GetUnityMainTargetGuid(), "ENABLE_BITCODE", "NO");
         project.SetBuildProperty(project.GetUnityFrameworkTargetGuid(), "ENABLE_BITCODE", "NO");
