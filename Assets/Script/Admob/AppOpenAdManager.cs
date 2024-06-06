@@ -5,9 +5,9 @@ using UnityEngine;
 public class AppOpenAdManager
 {
 #if UNITY_ANDROID
-    private const string _adUnitID = "ca-app-pub-5967655189999246~8967491277";
+    private const string _adUnitID = "ca-app-pub-3940256099942544/9257395921";
 #elif UNITY_IOS
-    private const string _adUnitID = "ca-app-pub-5967655189999246~6976596647";
+    private const string _adUnitID = "ca-app-pub-3940256099942544/9257395921";
 #else
     private const string _adUnitID = "unexpected_platform";
 #endif
@@ -93,7 +93,6 @@ public class AppOpenAdManager
         // Set the ad to null to indicate that AppOpenAdManager no longer has another ad to show.
         ad = null;
         isShowingAd = false;
-        LoadAd();
     }
 
     private void HandleAdFailedToPresentFullScreenContent(AdError error)
@@ -101,7 +100,6 @@ public class AppOpenAdManager
         Debug.LogFormat("Failed to present the ad (reason: {0})", error.GetMessage());
         // Set the ad to null to indicate that AppOpenAdManager no longer has another ad to show.
         ad = null;
-        LoadAd();
     }
 
     private void HandleAdDidRecordImpression()

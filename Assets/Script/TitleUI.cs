@@ -21,6 +21,11 @@ public class TitleUI : MonoBehaviour
 	[SerializeField] private Button _rewardButton;
 
 	/// <summary>
+	/// ネイティブボタン
+	/// </summary>
+	[SerializeField] private Button _nativeButton;
+
+	/// <summary>
 	/// GCコインの数
 	/// </summary>
 	[SerializeField] private TextMeshProUGUI _moneyText;
@@ -72,6 +77,8 @@ public class TitleUI : MonoBehaviour
 		_gameStartButton.onClick.AddListener(OnGameStartButton);
 		_rewardButton.onClick.AddListener(OnRewardButton);
 
+		_nativeButton.onClick.AddListener(OnNativeButton);
+		
 		UpdateMoney();
 
 		//リワード読み込み
@@ -80,11 +87,11 @@ public class TitleUI : MonoBehaviour
 		//AdmobUMP.FirstSetting();
 
 		//起動時広告
-		AppOpenAdManager.Instance.LoadAd();
 		AppOpenAdManager.Instance.OnLoaded += () =>
 		{
 			AppOpenAdManager.Instance.Show();
 		};
+		AppOpenAdManager.Instance.LoadAd();
 	}
 
 	private void Update()
@@ -171,5 +178,13 @@ public class TitleUI : MonoBehaviour
 	private void OnRewardButton()
 	{
 		AdmobLibrary.ShowReward();
+	}
+
+	/// <summary>
+	/// ネイティブ広告ボタンのコールバック
+	/// </summary>
+	private void OnNativeButton()
+	{
+		AdmobNative.LoadAd();
 	}
 }
